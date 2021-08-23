@@ -21,6 +21,7 @@ class NoemCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $output->writeln('Noem Plugin executing...');
         $installedRepository = $this->composer->getRepositoryManager()->getLocalRepository();
         $packages = $installedRepository->getPackages();
         $definitions = [];
@@ -32,7 +33,7 @@ class NoemCommand extends BaseCommand
             $noem = $extra['noem'];
             $factories = $noem['factories'] ?? null;
             $extensions = $noem['extensions'] ?? null;
-
+            $output->writeln(sprintf('Found %s', $package->getName()));
             $definitions[] = new ComposerServiceProviderDefinition(
                 $package->getName(),
                 $factories,
