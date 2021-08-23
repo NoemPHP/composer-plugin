@@ -10,13 +10,13 @@ use Composer\Factory;
 class Config implements \ArrayAccess
 {
 
-    private $conf;
+    private array $conf;
 
     public function __construct(string $key, Composer $composer)
     {
         $root = dirname(Factory::getComposerFile());
         $conf = [
-            'dump-modules' => $composer->getConfig()->get('vendor-dir') . '/modules.php',
+            'dump-modules' => $composer->getConfig()->get('vendor-dir') . '/noem.php',
             'autocomplete-services' => $root . '/.phpstorm.meta.php/serviceAutocomplete.php',
             'type-services' => $root . '/.phpstorm.meta.php/serviceTypes.php',
         ];
@@ -27,11 +27,6 @@ class Config implements \ArrayAccess
         $this->conf = $conf;
     }
 
-    public function offsetExists($offset)
-    {
-        return isset($this->conf[$offset]);
-    }
-
     public function offsetGet($offset)
     {
         if (!$this->offsetExists($offset)) {
@@ -39,6 +34,11 @@ class Config implements \ArrayAccess
         }
 
         return $this->conf[$offset];
+    }
+
+    public function offsetExists($offset): bool
+    {
+        return isset($this->conf[$offset]);
     }
 
     public function offsetSet($offset, $value)
