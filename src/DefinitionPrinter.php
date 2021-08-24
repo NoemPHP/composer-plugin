@@ -38,6 +38,7 @@ PHP;
         {$factories},
         {$extensions}
     ),
+
 PHP;
         }
         return ob_get_clean();
