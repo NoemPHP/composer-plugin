@@ -20,6 +20,10 @@ class PathResolver
         $pkg = $this->composer->getRepositoryManager()
             ->getLocalRepository()
             ->findPackage($packageName, new MatchAllConstraint());
+        if (!$pkg) {
+            $pkg = $this->composer->getPackage();
+        }
+
         $targetDir = $this->composer->getInstallationManager()->getInstallPath($pkg);
         $targetDir = rtrim($targetDir, '/') . '/';
         return $targetDir . $relativePath;
