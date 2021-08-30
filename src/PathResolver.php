@@ -7,6 +7,7 @@ namespace Noem\Composer;
 
 
 use Composer\Composer;
+use Composer\Factory;
 use Composer\Semver\Constraint\MatchAllConstraint;
 
 class PathResolver
