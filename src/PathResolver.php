@@ -21,7 +21,9 @@ class PathResolver
             ->getLocalRepository()
             ->findPackage($packageName, new MatchAllConstraint());
         if (!$pkg) {
-            $pkg = $this->composer->getPackage();
+            $composerFile = Factory::getComposerFile();
+            $composerFile = rtrim(dirname($composerFile), '/') . '/';
+            return realpath($composerFile . $relativePath);;
         }
 
         $targetDir = $this->composer->getInstallationManager()->getInstallPath($pkg);
