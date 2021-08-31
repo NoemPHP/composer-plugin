@@ -12,6 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class NoemCommand extends BaseCommand
 {
+
     private Config $config;
 
     private RootPackageInterface $package;

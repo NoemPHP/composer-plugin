@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-
 namespace Noem\Composer;
-
 
 use Composer\Composer;
 use Composer\Factory;
@@ -12,6 +10,7 @@ use Composer\Semver\Constraint\MatchAllConstraint;
 
 class PathResolver
 {
+
     public function __construct(private Composer $composer)
     {
     }
@@ -24,11 +23,32 @@ class PathResolver
         if (!$pkg) {
             $composerFile = Factory::getComposerFile();
             $composerFile = rtrim(dirname($composerFile), '/') . '/';
-            return realpath($composerFile . $relativePath);;
+            $path = realpath($composerFile . $relativePath);
+            if (!$path || !file_exists($path)) {
+                throw new \OutOfRangeException(
+                    sprintf(
+                        'File "%s" of package "%s" not found',
+                        $relativePath,
+                        $packageName
+                    )
+                );
+            }
+            return $path;
         }
 
         $targetDir = $this->composer->getInstallationManager()->getInstallPath($pkg);
         $targetDir = rtrim($targetDir, '/') . '/';
-        return $targetDir . $relativePath;
+
+        $file = $targetDir . $relativePath;
+        if (!file_exists($file)) {
+            throw new \OutOfRangeException(
+                sprintf(
+                    'File "%s" of package "%s" not found',
+                    $relativePath,
+                    $packageName
+                )
+            );
+        }
+        return $file;
     }
 }

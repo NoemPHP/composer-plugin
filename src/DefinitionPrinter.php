@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-
 namespace Noem\Composer;
-
 
 class DefinitionPrinter
 {
+
     public function __construct(private PathResolver $resolver)
     {
     }
@@ -28,12 +27,12 @@ PHP;
 
     private function loopDefinitions(ComposerServiceProviderDefinition ...$definitions)
     {
-        ob_start();
+        $result = '';
         foreach ($definitions as $definition) {
             $factories = $this->getParam($definition->package(), $definition->factories());
             $extensions = $this->getParam($definition->package(), $definition->extensions());
 
-            echo <<<PHP
+            $result .= <<<PHP
     '{$definition->package()}' => new \Noem\Container\ServiceProvider(
         {$factories},
         {$extensions}
@@ -41,7 +40,8 @@ PHP;
 
 PHP;
         }
-        return ob_get_clean();
+
+        return $result;
     }
 
     private function getParam(string $packageName, ?string $param): string
@@ -52,6 +52,7 @@ PHP;
         if (is_callable($param)) {
             return "call_user_func( $param )";
         }
+
         return "require '{$this->resolver->getPath($packageName, $param)}'";
     }
 }
