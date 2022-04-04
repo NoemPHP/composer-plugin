@@ -51,11 +51,12 @@ class NoemCommand extends BaseCommand
             );
         }
         if (empty($definitions)) {
-            return;
+            return 0;
         }
         $pathResolver = new PathResolver($this->composer);
         $loader = (new DefinitionPrinter($pathResolver))->print(...$definitions);
         $loaderPath = $this->config['dump-modules'];
         file_put_contents($loaderPath, $loader);
+        return 0;
     }
 }
